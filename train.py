@@ -214,9 +214,15 @@ def train(data_dir,
                                verbose=2)
 
         # plot
-        print(history.history.keys())
+
+        print('model', mg_model.metrics_names)
+        print('keys()',history.history.keys())
+
+        # print(metrics.name)
+
+
         plt.plot(history.history['loss'])
-        plt.plot(history.history['val_spatial_transformer_1_loss']+ (history.history['val_flow_loss_1']))
+        # plt.plot(history.history['val_spatial_transformer_1_loss'])
         plt.title('cvpr_auxi_loss')
         plt.ylabel('loss')
         plt.xlabel('Epoch')
@@ -238,7 +244,7 @@ if __name__ == "__main__":
     model = 'vm2'
     gpu_id = '0'
     lr = 1e-4
-    nb_epochs = 50
+    nb_epochs = 10
     reg_param = 0.01
     gama_param = 1
     steps_per_epoch = 20
@@ -247,21 +253,21 @@ if __name__ == "__main__":
     data_loss = 'mse'
     auxi_label = 1
 
-    for m in range(0, 3):   # 0, 100
+    for m in range(100):   # 0, 100
         choose_atlas = m
-        data_dir = list_names[choose_atlas + 1]
+        data_dir = list_names[choose_atlas + 51]
         # data_dir = 'D:/voxel/data/01_Converted'
-        seg_dir = seg_list_names[choose_atlas + 1]
+        seg_dir = seg_list_names[choose_atlas + 51]
         # del seg_dir[5]
-        atlas_file = list_names[choose_atlas] # 'D:/voxel/data/40.tif'
-        Sf_file = seg_list_names[choose_atlas]
+        atlas_file = list_names[choose_atlas + 50] # 'D:/voxel/data/40.tif'
+        Sf_file = seg_list_names[choose_atlas + 50]
 
         if m%4 == 0:
-            val_data_dir = list_names[choose_atlas + 102]
-            val_seg_dir = seg_list_names[choose_atlas + 102]
+            val_data_dir = list_names[m + 1]
+            val_seg_dir = seg_list_names[m + 1]
 
-            val_atlas_file = list_names[choose_atlas + 101]
-            val_Sf_file = seg_list_names[choose_atlas + 101]
+            val_atlas_file = list_names[m]
+            val_Sf_file = seg_list_names[m]
 
         model_dir = '/home/students/huanyu/PycharmProjects/voxel/models_auxi'
         model_dir = os.path.join(model_dir, str(m))
