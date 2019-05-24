@@ -177,7 +177,7 @@ def train(data_dir,
         loss_weight = [1.0, reg_param]
 
         # reg_param_tensor = tf.constant(5, dtype=tf.float32)
-        # metrics_2 = losses.Grad(gama_param, val_Sf_, val_Sm_, penalty='l2', flag_vali = True).loss   # reg_param
+        metrics_2 = losses.Grad(gama_param, val_Sf_, val_Sm_, penalty='l2', flag_vali = True).loss   # reg_param
 
 
 
@@ -200,8 +200,8 @@ def train(data_dir,
         # compile
         mg_model.compile(optimizer=Adam(lr=lr),
                          loss=loss_model,
-                         loss_weights=loss_weight)
-                         # metrics={'y': data_loss, 'flow': metrics_2})
+                         loss_weights=loss_weight,
+                         metrics={'flow': metrics_2})
 
         # fit
         history = mg_model.fit_generator(cvpr2018_gen,
@@ -216,7 +216,7 @@ def train(data_dir,
         # plot
         print(history.history.keys())
         plt.plot(history.history['loss'])
-        # plt.plot(history.history['metrics'])
+        plt.plot(history.history['val_spatial_transformer_1_loss']+ (history.history['val_flow_loss_1']))
         plt.title('cvpr_auxi_loss')
         plt.ylabel('loss')
         plt.xlabel('Epoch')
@@ -241,7 +241,7 @@ if __name__ == "__main__":
     nb_epochs = 50
     reg_param = 0.01
     gama_param = 1
-    steps_per_epoch = 50
+    steps_per_epoch = 20
     batch_size = 1  # it seems only can be 1
 
     data_loss = 'mse'
